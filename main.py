@@ -22,19 +22,11 @@ import requests
 
 datastore_client = datastore.Client()
 DEFAULT_KEY = 'action'
-
 app = Flask(__name__)
-
 app.secret_key = b'lkjadfsj009(*02347@!$&'
-
-s1 = set([1, 2, 3])
 default_genres = set(["action", "platform", "puzzle", "role-playing", "sports"])
 
-"""
-User class I created, serves as a placeholder demonstrator
-to store google user info
-"""
-
+# Function to store game info of specific genre in datastore
 def store_video_game(title, rating, platform, developer, year, price, username, email, dt, kn):
     entity = datastore.Entity(key = datastore_client.key(kn))
     entity.update({
@@ -51,6 +43,7 @@ def store_video_game(title, rating, platform, developer, year, price, username, 
 
     datastore_client.put(entity)
 
+# Function to add unique game in to the cart(a datastore "kind")
 def add_unique_game_to_cart(title, rating, platform, developer, year, price, username, email, dt, kn):
     query = datastore_client.query(kind=kn)
     games = query.fetch()
@@ -62,7 +55,7 @@ def add_unique_game_to_cart(title, rating, platform, developer, year, price, use
 
     store_video_game(title, rating, platform, developer, year, price, username, email, dt, kn)
 
-
+# Find the game of certain genre from datastore based on id
 def find_game_by_id(genre, game_id):
     query = datastore_client.query(kind=genre)
     games = query.fetch()
@@ -70,15 +63,14 @@ def find_game_by_id(genre, game_id):
         if game.key.id == int(game_id):
             return game
 
-
+# Fetch all the games in a given genre
 def fetch_items(kn):
     query = datastore_client.query(kind=kn)
     query.order = ['-timestamp']
-    # games = query.fetch(limit=limit)
     games = query.fetch()
     return games
 
-
+# Function to search the video of given genre according to one or more field
 def search_video_game(title, rating, platform, developer, year, genre):
     query = datastore_client.query(kind = genre)
     games = query.fetch() 
@@ -97,8 +89,9 @@ def search_video_game(title, rating, platform, developer, year, genre):
         results.append(game)
     return results
 
-def find_user_item(username, useremail, type):
-    query = datastore_client.query(kind = type)
+# Function to find the user's games in cart or purchase history
+def find_user_item(username, useremail, user_type):
+    query = datastore_client.query(kind = user_type)
     items = query.fetch()
     results = []
     for item in items:
@@ -106,6 +99,7 @@ def find_user_item(username, useremail, type):
             results.append(item)
     return results
 
+# Function to add the genres newly added to the 'added_genre' in data store
 def add_unique_genre_to_app(game_type, dt):
     query = datastore_client.query(kind = 'added_genre')
     genres = query.fetch()
@@ -120,35 +114,14 @@ def add_unique_genre_to_app(game_type, dt):
     })
     datastore_client.put(entity)
 
+# Home page
 @app.route('/', methods=['GET', 'POST'])
 def root():
-    key_name = DEFAULT_KEY
-    # query = datastore_client.query().filter(Person.key < ndb.Key(Person, '16.240.886'))
-    if 'username' in session:
-        username = session['username'] 
-    else:
-        username = ''
-
-    if 'email' in session:
-        useremail = session['email'] 
-    else:
-        useremail = ''
-
-    # If POST, store the new message into Datastore in the appropriate guestbook
-    if request.method == 'POST':
-        key_name = request.form['genre'].strip().lower()
-        store_video_game(request.form['title'].strip(), request.form['rating'].strip(), request.form['platform'].strip(), 
-            request.form['developer'].strip(), request.form['year'].strip(), request.form['price'].strip(), username, useremail, datetime.datetime.now(), key_name)
-        # genres.add(key_name.lower())
-        if key_name not in default_genres:
-            add_unique_genre_to_app(key_name, datetime.datetime.now())
-    # Fetch the most recent 10 messages from the appropriate guestbook in Datastore
-    # greetings = fetch_greetings(10, key_name)
-
-    added_genres = fetch_items('added_genre')
+    added_genres = fetch_items('added_genre') # Fetch the added genres
     return render_template(
-        'index.html', genres=sorted(default_genres), added_genres = added_genres, genre = key_name)
+        'index.html', genres=sorted(default_genres), added_genres = added_genres)
 
+# Login
 @app.route('/login', methods=['POST'])
 def login():
 
@@ -156,18 +129,45 @@ def login():
     token = request.data.decode('utf-8')
     # Send to google for verification and get JSON return values
     verify = requests.get("https://oauth2.googleapis.com/tokeninfo?id_token=" + token)
-    
     # Use a session cookie to store the username and email
-
     session['username'] = verify.json()["name"]
     session['email'] = verify.json()["email"]
 
     return redirect("/")
 
-@app.route('/new', methods=['GET'])
+# Add video game page
+@app.route('/new', methods=['GET', 'POST'])
 def new():
+    key_name = DEFAULT_KEY
+    if 'username' in session:
+        username = session['username'] 
+    else:
+        username = ''
+    if 'email' in session:
+        useremail = session['email'] 
+    else:
+        useremail = ''
+    # If POST, store the new message into Datastore in the appropriate genre
+    if request.method == 'POST':
+        key_name = request.form['genre'].strip().lower()
+        store_video_game(request.form['title'].strip(), 
+            request.form['rating'].strip(), 
+            request.form['platform'].strip(), 
+            request.form['developer'].strip(), 
+            request.form['year'].strip(), 
+            request.form['price'].strip(), 
+            username, 
+            useremail, 
+            datetime.datetime.now(), 
+            key_name)
+        # If the added genre is not in the default, add it if unique
+        if key_name not in default_genres:
+            add_unique_genre_to_app(key_name, datetime.datetime.now())
+        return redirect('/')
+
     return render_template('new.html')
 
+# Search page
 @app.route('/search', methods=['GET','POST'])
 def search():
     if request.method == 'POST':
@@ -177,6 +177,7 @@ def search():
         platform = request.form['platform'].strip()
         developer = request.form['developer'].strip()
         year = request.form['year'].strip()
+        # Error if no fields
         if (title == "" and rating == "" and platform == "" and developer == "" and year == ""):
             message = "Please at least input one field."
             return render_template('notfound.html', message=message)
@@ -185,16 +186,17 @@ def search():
         if (len(results) == 0):
             message = "Sorry, no game found."
             return render_template('notfound.html', message=message)
+
         return render_template('result.html', results = results, genre = genre)
     return render_template('search.html')
 
-
+# Display a genre 
 @app.route('/display/<genre>', methods=['GET'])
 def display(genre):
-    # Fetch the most recent 10 messages from the appropriate guestbook in Datastore
     games = fetch_items(genre)
     return render_template('show.html', games = games, genre = genre)
 
+# Add to user's cart
 @app.route('/add', methods = ['GET','POST'])
 def add_game():
     kind = request.args.get('kind')
@@ -210,17 +212,17 @@ def add_game():
     else:
         useremail = ''
 
+    # If not login
     if username == 'Anonymous' and useremail == '':
         return render_template('noauthen.html')
 
     game = find_game_by_id(kind, game_id)
-
-    # if request.method == 'POST':
     key_name = 'cart'
     add_unique_game_to_cart(game['title'].strip(), game['rating'].strip(), game['platform'].strip(), game['developer'].strip(), 
         game['year'].strip(), game['price'].strip(), username, useremail, datetime.datetime.now(), key_name)
     return redirect('/cart/'+ username)
 
+# Cart
 @app.route('/cart/', methods = ['GET'])
 def cart():
     if 'username' in session:
@@ -237,7 +239,7 @@ def cart():
         return render_template('noauthen.html')
     return redirect('/cart/'+ username)
 
-
+# To show user's cart
 @app.route('/cart/<username>', methods = ['GET','POST'])
 def user_cart(username):
     if 'username' in session:
@@ -253,6 +255,7 @@ def user_cart(username):
     if username == 'Anonymous' and useremail == '':
         return render_template('noauthen.html')
 
+    # If there is no items in user's cart, do not show "Checkout"(ready = false)
     games = find_user_item(username, useremail, 'cart')
     if (len(games) == 0):
         ready = False
@@ -265,6 +268,7 @@ def user_cart(username):
 
     return render_template('cart.html', games = games, username = username, sum = price_sum, ready = ready)
 
+# Remove item from cart
 @app.route('/remove/<cart_id>', methods = ['GET', 'POST'])
 def remove_cart_item(cart_id):
     genre = 'cart'
@@ -272,6 +276,7 @@ def remove_cart_item(cart_id):
     datastore_client.delete(game.key)
     return redirect('/cart/')
 
+# Confirm to checkout
 @app.route('/readytocheck', methods = ['GET'])
 def ready():
     if 'username' in session:
@@ -293,6 +298,7 @@ def ready():
         price_sum += int(game['price'])
     return render_template('ready.html', games = games, username = username, sum = price_sum)
 
+# Checkout result
 @app.route('/checkout', methods = ['GET'])
 def checkout():
     if 'username' in session:
@@ -316,6 +322,7 @@ def checkout():
             game['year'], game['price'], username, useremail, datetime.datetime.now(), 'purchase_history')
     return render_template('checkout.html', sum = price_sum, username = username)
 
+# Purchase history
 @app.route('/history/', methods = ['GET'])
 def history():
     if 'username' in session:
@@ -334,7 +341,7 @@ def history():
 
     return render_template('history.html', games = games, username = username)
 
-    
+
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
