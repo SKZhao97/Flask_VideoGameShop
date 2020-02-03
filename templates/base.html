@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="google-signin-scope" content="profile email">
+    <title>Video Game Database</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <meta name="google-signin-client_id" content="767289203166-erml3ns40nehrf5pfq47ieq7l7lsflp9.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">VedioGame DB</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="/cart">My cart</a></li>
+            <li><a href="/history">History</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+  </head>
+
+{% block content %}
+
+	<!-- HTML templates -->
+
+{% endblock content %}
+
+</html>

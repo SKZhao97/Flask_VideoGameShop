@@ -1,0 +1,16 @@
+body {
+  font-family: "helvetica", sans-serif;
+}
+
+div.horizontalgap {
+  float: left;
+  overflow: hidden;
+  height: 1px;
+  width: 0px;
+}
+#container{
+    width: 400px;
+    height: 300px;
+    background-color: #ABC;
+}
+

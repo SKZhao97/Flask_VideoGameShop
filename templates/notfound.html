@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class = "container">
+	<div class = "row">
+		<div class = "col-md-9">
+			<div class = "list-group">
+				<li class = "list-group-item list-group-item-primary active">
+					<strong>{{ message }}</strong></li>
+			</div>
+			<div>
+				<a href = "/search">Go Back to Search</a>
+			</div>
+			<div>
+				<a href = "/">Go Back to home page</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

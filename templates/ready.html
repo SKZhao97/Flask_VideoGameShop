@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+	<div class = "row">
+	  <div class = "col-md-6">
+	    <div class = "list-group">
+	    	<li class = "list-group-item list-group-item-primary active"> <strong>Are you ready to check out? </strong> </li>
+	    	<li class = "list-group-item list-group-item-primary active"> Your order details:</li>
+	    	{% for game in games %}
+	   		<li class = "list-group-item list-group-item-action">
+   				{{ game.title }}<span class = "pull-right">$ {{ game.price }}</span>
+	   		</li>
+			{% endfor %}
+			<li class = "list-group-item list-group-item-action"> Total:
+				<span class = "pull-right">$ {{ sum }} </span>
+			</li>
+			<li class = "list-group-item list-group-item-primary active"> Payment method infomation:</li>
+			<li class = "list-group-item list-group-item-action">Name: {{ username }}</li>
+			<li class = "list-group-item list-group-item-action">Card No.: XXXXXXXXXXXXX</li>
+
+	    </div>
+
+	    <div>
+			<a class = "btn btn-warning btn-lg" href = "/checkout"> Yes, check out immediately </a>
+		</div>
+		<div>
+			<a class = "btn btn-warning btn-lg" href = "/cart"> No, I need more time </a>
+		</div>
+		<div>
+			<a href = "/">Go Back to home page</a>
+		</div>
+	  </div>
+	</div>
+</div>
+
+
+
+{% endblock content %}

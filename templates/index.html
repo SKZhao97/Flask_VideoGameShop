@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <body>
+    <script>
+      function onSignIn(googleUser) {
+        console.log("Sign On In Progress")
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+
+        //Set default HTTP Request Header
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:8080/login');
+        //xhr.open('POST', 'http://video-game-shop-sikai-zhao.appspot.com/login');
+        xhr.send(id_token);
+      }
+    </script>
+    <b> <h1 style = "text-align: center;">AppEngine Video Game Database</h1></b>
+    <hr><br>
+    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <center>
+    <div class="container">
+      <center>
+      <div class = "row">
+        <div class = "col-md-12">
+          <div class = "list-group">
+            <li class = "list-group-item list-group-item-primary active"><strong>Video game lists based on Genres</strong></li>
+            {% for genre in genres %}
+              <a href = "{{ url_for('display',genre = genre) }}" class = "list-group-item list-group-item-action">Browse <strong>{{ genre }}</strong> games</a>
+            {% endfor %}
+            {% for added_genre in added_genres %}
+              <a href = "{{ url_for('display',genre = added_genre['name']) }}" class = "list-group-item list-group-item-action">Browse <strong>{{ added_genre['name'] }}</strong> games</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </center>
+      <hr>
+      <a class = "btn btn-primary btn-lg" href = "/new"> Add New Video Game </a>
+      <a class = "btn btn-primary btn-lg" href = "/search"> Seach for Video Game </a>
+      <a class = "btn btn-primary btn-lg" href = "/cart"> My Cart </a>
+      <a class = "btn btn-primary btn-lg" href = "/history"> Purchase History </a>
+
+    </div>
+  </center>
+  </body>
+
+{% endblock content %}

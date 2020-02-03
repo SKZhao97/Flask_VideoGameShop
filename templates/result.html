@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class = "container">
+	<div class = "row">
+		<div class = "col-md-6">
+			<div class = "list-group">
+				<li class = "list-group-item list-group-item-primary active">
+					<strong>Search result for {{ genre }} </strong></li>
+				<li class = "list-group-item list-group-item-primary active"> 
+		    		Title, ESRB rating, Game Platform, Developer, Year of Release
+		    		<span class = "pull-right">Price</span>
+		    	</li>
+				{% for result in results %}
+					<li class = "list-group-item list-group-item-action">
+							{{ result.title }},{{ result.rating }},{{ result.platform }},{{ result.developer }},{{ result.year }} 
+							<span class = "pull-right">$ {{ result.price}} 
+								<a class = "btn btn-xs btn-warning" 
+									href="/add?kind={{ result.key.kind }}&id={{ result.key.id }}">Add to cart
+									<i class="fas fa-cart-plus"></i>
+								</a>
+							</span>
+					</li>
+				{% endfor %}
+			</div>
+			<div>
+				<a href = "/search">Go Back to Search</a>
+			</div>
+			<div>
+				<a href = "/">Go Back to home page</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}
