@@ -2,7 +2,7 @@
 
 Distributed System Programming Assignment #1
 
-## Video Game Database based on Flask and Google Cloud Platform
+## Video Game Shop based on Flask and Google Cloud Platform
 
 ### Feature:
 - Use Google Cloud Platform Datastore as storage
