@@ -13,6 +13,8 @@
 # limitations under the License.
 
 from flask import Flask, render_template, request, session, redirect
+from flask_login import logout_user
+
 from google.cloud import datastore
 from google.oauth2 import id_token
 
@@ -132,8 +134,19 @@ def login():
     # Use a session cookie to store the username and email
     session['username'] = verify.json()["name"]
     session['email'] = verify.json()["email"]
+    return redirect("/")
+
+# other imports as necessary
+@app.route('/logout', methods=['GET'])
+def logout():
+
+    # Decode the incoming data
+    session['username'] = ''
+    session['email'] = ''
+    print(session)
 
     return redirect("/")
+
 
 # Add video game page
 @app.route('/new', methods=['GET', 'POST'])
@@ -142,7 +155,7 @@ def new():
     if 'username' in session:
         username = session['username'] 
     else:
-        username = ''
+        username = 'Anonymous'
     if 'email' in session:
         useremail = session['email'] 
     else:
@@ -205,7 +218,7 @@ def add_game():
     if 'username' in session:
         username = session['username'] 
     else:
-        username = 'Anonymous'
+        username = ''
 
     if 'email' in session:
         useremail = session['email']
@@ -213,7 +226,7 @@ def add_game():
         useremail = ''
 
     # If not login
-    if username == 'Anonymous' and useremail == '':
+    if username == '' and useremail == '':
         return render_template('noauthen.html')
 
     game = find_game_by_id(kind, game_id)
@@ -228,14 +241,15 @@ def cart():
     if 'username' in session:
         username = session['username'] 
     else:
-        username = 'Anonymous'
+        username = ''
 
     if 'email' in session:
         useremail = session['email']
     else:
         useremail = ''
 
-    if username == 'Anonymous' and useremail == '':
+    if username == '' and useremail == '':
+    # if username == 'Anonymous' and useremail == '':
         return render_template('noauthen.html')
     return redirect('/cart/'+ username)
 
@@ -245,14 +259,14 @@ def user_cart(username):
     if 'username' in session:
         username = session['username'] 
     else:
-        username = 'Anonymous'
+        username = ''
 
     if 'email' in session:
         useremail = session['email']
     else:
         useremail = ''
-
-    if username == 'Anonymous' and useremail == '':
+    if username == '' and useremail == '':
+    # if username == 'Anonymous' and useremail == '':
         return render_template('noauthen.html')
 
     # If there is no items in user's cart, do not show "Checkout"(ready = false)
@@ -282,14 +296,14 @@ def ready():
     if 'username' in session:
         username = session['username'] 
     else:
-        username = 'Anonymous'
+        username = ''
 
     if 'email' in session:
         useremail = session['email']
     else:
         useremail = ''
 
-    if username == 'Anonymous' and useremail == '':
+    if username == '' and useremail == '':
         return render_template('noauthen.html')
 
     games = find_user_item(username, useremail, 'cart')
@@ -304,14 +318,14 @@ def checkout():
     if 'username' in session:
         username = session['username'] 
     else:
-        username = 'Anonymous'
+        username = ''
 
     if 'email' in session:
         useremail = session['email']
     else:
         useremail = ''
 
-    if username == 'Anonymous' and useremail == '':
+    if username == '' and useremail == '':
         return render_template('noauthen.html')
     games = find_user_item(username, useremail, 'cart')
     price_sum = 0
@@ -328,14 +342,14 @@ def history():
     if 'username' in session:
         username = session['username'] 
     else:
-        username = 'Anonymous'
+        username = ''
 
     if 'email' in session:
         useremail = session['email']
     else:
         useremail = ''
 
-    if username == 'Anonymous' and useremail == '':
+    if username == '' and useremail == '':
         return render_template('noauthen.html')
     games = find_user_item(username, useremail, 'purchase_history')
 
