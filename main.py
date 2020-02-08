@@ -13,8 +13,6 @@
 # limitations under the License.
 
 from flask import Flask, render_template, request, session, redirect
-from flask_login import logout_user
-
 from google.cloud import datastore
 from google.oauth2 import id_token
 
@@ -365,4 +363,4 @@ if __name__ == '__main__':
     # the "static" directory. See:
     # http://flask.pocoo.org/docs/1.0/quickstart/#static-files. Once deployed,
     # App Engine itself will serve those files as configured in app.yaml.
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
