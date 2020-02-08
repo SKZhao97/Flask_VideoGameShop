@@ -2,7 +2,7 @@
 
 Distributed System Programming Assignment #1
 
-## Video Game Database based on Flask and Google Cloud Platform
+## Video Game Shop based on Flask and Google Cloud Platform
 
 ### Feature:
 - Use Google Cloud Platform Datastore as storage
@@ -14,4 +14,4 @@ Distributed System Programming Assignment #1
 - Implemented cart operations, such as *add to cart* and *remove*
 - Implemented checkout operations
 - Maintaining the cart list and purchase history list for specific user
-- Deploy on Google Cloud Platform
+- Deploy on Google Cloud Platform AppEngine
