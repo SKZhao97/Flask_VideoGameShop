@@ -26,6 +26,7 @@ app = Flask(__name__)
 app.secret_key = b'lkjadfsj009(*02347@!$&'
 default_genres = set(["action", "platform", "puzzle", "role-playing", "sports"])
 current_genre = "action"
+current_genre_new = "action"
 
 # Function to store game info of specific genre in datastore
 def store_video_game(title, rating, platform, developer, year, price, username, email, dt, kn):
@@ -162,6 +163,8 @@ def new():
     # If POST, store the new message into Datastore in the appropriate genre
     if request.method == 'POST':
         key_name = request.form['genre'].strip().lower()
+        global current_genre_new
+        current_genre_new = key_name
         store_video_game(request.form['title'].strip(), 
             request.form['rating'].strip(), 
             request.form['platform'].strip(), 
@@ -177,7 +180,7 @@ def new():
             add_unique_genre_to_app(key_name, datetime.datetime.now())
         return redirect('/')
 
-    return render_template('new.html')
+    return render_template('new.html', current = current_genre_new)
 
 # Search page
 @app.route('/search', methods=['GET','POST'])
