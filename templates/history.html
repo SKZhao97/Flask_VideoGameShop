@@ -4,16 +4,16 @@
 
 <div class="container">
 		<div class = "row">
-		  <div class = "col-md-6">
+		  <div class = "col-md-9">
 		    <div class = "list-group">
 		    	<li class = "list-group-item list-group-item-primary active"> <strong>Games purchasing history for {{ username }}</strong> </li>
 		    	<li class = "list-group-item list-group-item-primary active"> 
-		    		Title, ESRB rating, Game Platform, Developer, Year of Release
+		    		Title, ESRB rating, Game Platform, Developer, Year of Release, Date of purchase
 		    		<span class = "pull-right">Price</span>
 		    	</li>
 				{% for game in games %}
 		   		<li class = "list-group-item list-group-item-action">
-		   				{{ game.title }},{{ game.rating }},{{ game.platform }},{{ game.developer }},{{ game.year }}
+		   				{{ game.title }}, {{ game.rating }}, {{ game.platform }}, {{ game.developer }}, {{ game.year }}, {{ game.timestamp.date() }}
 		   				<span class = "pull-right">$ {{ game.price }}</span>
 		   		</li>
 				{% endfor %}

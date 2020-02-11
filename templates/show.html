@@ -4,7 +4,7 @@
 	<div class="container">
 
 		<div class = "row">
-		  <div class = "col-md-6">
+		  <div class = "col-md-9">
 		    <div class = "list-group">
 		    	<li class = "list-group-item list-group-item-primary active"> <strong>Games in genre of {{ genre }} game</strong> </li>
 		    	<li class = "list-group-item list-group-item-primary active"> 
@@ -13,7 +13,7 @@
 		    	</li>
 				{% for game in games %}
 		   		<li class = "list-group-item list-group-item-action">
-		   				{{ game.title }},{{ game.rating }},{{ game.platform }},{{ game.developer }},{{ game.year }}
+		   				{{ game.title }}, {{ game.rating }}, {{ game.platform }}, {{ game.developer }}, {{ game.year }}
 		   				<span class = "pull-right">$ {{ game.price }} 
 							<a class = "btn btn-xs btn-warning" 
 								href="/add?kind={{ game.key.kind }}&id={{ game.key.id }}">Add to cart

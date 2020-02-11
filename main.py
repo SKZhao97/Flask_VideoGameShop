@@ -25,6 +25,7 @@ DEFAULT_KEY = 'action'
 app = Flask(__name__)
 app.secret_key = b'lkjadfsj009(*02347@!$&'
 default_genres = set(["action", "platform", "puzzle", "role-playing", "sports"])
+current_genre = "action"
 
 # Function to store game info of specific genre in datastore
 def store_video_game(title, rating, platform, developer, year, price, username, email, dt, kn):
@@ -188,6 +189,8 @@ def search():
         platform = request.form['platform'].strip()
         developer = request.form['developer'].strip()
         year = request.form['year'].strip()
+        global current_genre
+        current_genre = genre
         # Error if no fields
         if (title == "" and rating == "" and platform == "" and developer == "" and year == ""):
             message = "Please at least input one field."
@@ -199,7 +202,8 @@ def search():
             return render_template('notfound.html', message=message)
 
         return render_template('result.html', results = results, genre = genre)
-    return render_template('search.html')
+    print(current_genre)
+    return render_template('search.html', current = current_genre)
 
 # Display a genre 
 @app.route('/display/<genre>', methods=['GET'])
@@ -363,4 +367,4 @@ if __name__ == '__main__':
     # the "static" directory. See:
     # http://flask.pocoo.org/docs/1.0/quickstart/#static-files. Once deployed,
     # App Engine itself will serve those files as configured in app.yaml.
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='127.0.0.1', port=8080, debug=True)

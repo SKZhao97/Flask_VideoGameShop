@@ -4,7 +4,7 @@
 
 <div class = "container">
 	<div class = "row">
-		<div class = "col-md-6">
+		<div class = "col-md-9">
 			<div class = "list-group">
 				<li class = "list-group-item list-group-item-primary active">
 					<strong>Search result for {{ genre }} </strong></li>
@@ -14,7 +14,7 @@
 		    	</li>
 				{% for result in results %}
 					<li class = "list-group-item list-group-item-action">
-							{{ result.title }},{{ result.rating }},{{ result.platform }},{{ result.developer }},{{ result.year }} 
+							{{ result.title }}, {{ result.rating }}, {{ result.platform }}, {{ result.developer }}, {{ result.year }} 
 							<span class = "pull-right">$ {{ result.price}} 
 								<a class = "btn btn-xs btn-warning" 
 									href="/add?kind={{ result.key.kind }}&id={{ result.key.id }}">Add to cart
