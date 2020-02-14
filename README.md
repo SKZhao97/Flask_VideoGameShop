@@ -5,8 +5,8 @@ Distributed System Programming Assignment #1
 ## Video Game Shop based on Flask and Google Datastore
 
 ### Feature:
-- Use Google Cloud Platform Datastore as storage
-- Show video games in generes
+- Use **Google Cloud Platform Datastore** as storage
+- Show video games in **generes**
 - Add video games with properties of *titel, RSDB rating, platform, developer, year of release* and price
 - Search vidoe games in specific genere with any one or combinations of the properties
 - Case insensitive and err-input handling
