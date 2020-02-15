@@ -208,11 +208,17 @@ def search():
     print(current_genre)
     return render_template('search.html', current = current_genre)
 
-# Display a genre 
-@app.route('/display/<genre>', methods=['GET'])
-def display(genre):
+# Display a genre using parameters passed in
+# @app.route('/display/<genre>', methods=['GET'])
+# def display(genre):
+#     games = fetch_items(genre)
+#     return render_template('show.html', games = games, genre = genre)
+@app.route('/display', methods=['GET'])
+def display():
+    genre = request.args.get('genre')
     games = fetch_items(genre)
     return render_template('show.html', games = games, genre = genre)
+    
 
 # Add to user's cart
 @app.route('/add', methods = ['GET','POST'])
@@ -258,7 +264,7 @@ def cart():
         return render_template('noauthen.html')
     return redirect('/cart/'+ username)
 
-# To show user's cart
+# To show user's cart using parameter passed in
 @app.route('/cart/<username>', methods = ['GET','POST'])
 def user_cart(username):
     if 'username' in session:
@@ -287,7 +293,7 @@ def user_cart(username):
 
     return render_template('cart.html', games = games, username = username, sum = price_sum, ready = ready)
 
-# Remove item from cart
+# Remove item from cart using parameter passed in
 @app.route('/remove/<cart_id>', methods = ['GET', 'POST'])
 def remove_cart_item(cart_id):
     genre = 'cart'

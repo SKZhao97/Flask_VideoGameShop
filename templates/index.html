@@ -20,8 +20,8 @@
 
         //Set default HTTP Request Header
         var xhr = new XMLHttpRequest();
-        //xhr.open('POST', 'http://localhost:8080/login');
-        xhr.open('POST', 'http://video-game-shop-sikai-zhao.appspot.com/login');
+        xhr.open('POST', 'http://localhost:8080/login');
+        //xhr.open('POST', 'http://video-game-shop-sikai-zhao.appspot.com/login');
         xhr.send(id_token);
       }
     </script>
@@ -50,7 +50,8 @@
               <a href = "{{ url_for('display',genre = genre) }}" class = "list-group-item list-group-item-action">Browse <strong>{{ genre }}</strong> games</a>
             {% endfor %}
             {% for added_genre in added_genres %}
-              <a href = "{{ url_for('display',genre = added_genre['name']) }}" class = "list-group-item list-group-item-action">Browse <strong>{{ added_genre['name'] }}</strong> games</a>
+              <!-- <a href = "{{ url_for('display',genre = added_genre['name']) }}" class = "list-group-item list-group-item-action">Browse <strong>{{ added_genre['name'] }}</strong> games</a> -->
+              <a href="/display?genre={{ added_genre['name'] }}" class = "list-group-item list-group-item-action">Browse <strong>{{ added_genre['name'] }}</strong> games</a>
             {% endfor %}
           </div>
         </div>
