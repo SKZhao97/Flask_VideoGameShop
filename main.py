@@ -208,11 +208,7 @@ def search():
     print(current_genre)
     return render_template('search.html', current = current_genre)
 
-# Display a genre using parameters passed in
-# @app.route('/display/<genre>', methods=['GET'])
-# def display(genre):
-#     games = fetch_items(genre)
-#     return render_template('show.html', games = games, genre = genre)
+# Display a genre using parameter passed in
 @app.route('/display', methods=['GET'])
 def display():
     genre = request.args.get('genre')
@@ -220,7 +216,7 @@ def display():
     return render_template('show.html', games = games, genre = genre)
     
 
-# Add to user's cart
+# Add to user's cart using parameters passed in
 @app.route('/add', methods = ['GET','POST'])
 def add_game():
     kind = request.args.get('kind')
