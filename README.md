@@ -29,12 +29,12 @@ Distributed System Programming Assignment #1
 ### Run:
 1. To run locally: first open the /templates/index.html file, comment out the line24 and cancell the comment of line23, and then type in terminal:
 
-$ cd videoGameShopApp
-$ pip install --upgrade google-cloud-datastore (Optional)
-$ pip install --upgrade google-api-python-client(Optional)
+  $ cd videoGameShopApp  
+  $ pip install --upgrade google-cloud-datastore (Optional)  
+  $ pip install --upgrade google-api-python-client(Optional)  
 
-$ export GOOGLE_APPLICATION_CREDENTIALS="[Path to the account .json file]/[projectCredentials].json"
-$ python3 main.py
+  $ export GOOGLE_APPLICATION_CREDENTIALS="[Path to the account .json file]/[projectCredentials].json"  
+  $ python3 main.py  
 
 then visit http://localhost:8080
 
